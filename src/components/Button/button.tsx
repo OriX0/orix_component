@@ -7,16 +7,8 @@
 import React from "react";
 import classNames from "classnames";
 
-export enum BtnSize {
-  Large='lg',
-  Small='sm'
-}
-export enum BtnType {
-  Primary='primary',
-  Default='default',
-  Danger='danger',
-  Link='link'
-}
+export type BtnSize = 'lg' | 'sm'
+export type BtnType = 'primary' | 'default' | 'danger' | 'link'
 
 interface BaseButtonProps  {
   className?:string,
@@ -26,18 +18,18 @@ interface BaseButtonProps  {
   children?:React.ReactNode,
   href?:string
 }
-type NativeButtonProps =BaseButtonProps & React.ButtonHTMLAttributes<HTMLElement> ;
-type AnchorButtonProps =BaseButtonProps & React.AnchorHTMLAttributes<HTMLElement> ;
-export type ButtonProps =Partial<NativeButtonProps & AnchorButtonProps> ;
+type NativeButtonProps = React.ButtonHTMLAttributes<HTMLElement> ;
+type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLElement> ;
+export type ButtonProps =Partial<NativeButtonProps & AnchorButtonProps> & BaseButtonProps;
 const Button:React.FC<ButtonProps> = (props)=>{
   const {disable,size,btnType,children,href,className,...resetProps} = props;
   const classes = classNames(className,'btn',{
     [`btn-${btnType}`] : btnType,
     [`btn-${size}`] : size,
     // 对 link btn进行单独处理
-    'disabled': (btnType === BtnType.Link) && disable
+    'disabled': (btnType === 'link') && disable
   })
-  if(btnType===BtnType.Link){
+  if(btnType==='link'){
     return <a className={classes} href={href} {...resetProps}>{children}</a>
   }
   return <button className={classes} disabled={disable} {...resetProps}>{children}</button>
@@ -45,6 +37,6 @@ const Button:React.FC<ButtonProps> = (props)=>{
 
 Button.defaultProps = {
   disable:false,
-  btnType:BtnType.Default,
+  btnType:'default',
 }
 export default Button
