@@ -27,6 +27,7 @@ export interface MenuProps {
 interface IMenuContext {
   index: number;
   onSelect?: selectCallback;
+  mode?: MenuMode;
 }
 // 创建context
 const MenuContext = createContext<IMenuContext>({ index: 0 });
@@ -43,7 +44,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   const [currentActive, setActive] = useState(defaultIndex);
   const classes = classNames(className, 'oriX-menu', {
     'menu-vertical': mode === 'vertical',
-    'menu-horizontal': mode === 'horizontal',
+    'menu-horizontal': mode !== 'vertical',
   });
   // 定义回调函数
   const handleClick = (index: number) => {
@@ -55,6 +56,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   const transmitValue: IMenuContext = {
     index: currentActive ?? 0,
     onSelect: handleClick,
+    mode,
   };
   const renderChildren = () => {
     return Children.map(children, (child, index) => {
