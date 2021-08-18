@@ -3,12 +3,13 @@
  * @Author: OriX
  * @LastEditors: OriX
  */
-import { createContext,useContext,useState } from "react";
+import { Children, cloneElement, createContext,FunctionComponentElement,useContext,useState } from "react";
 import classNames from "classnames";
+import {MenuItemProps} from './menu-item'
 
 type MenuMode = 'horizontal' | 'vertical';
 type selectCallback = (index:number)=>void;
-interface MenuProps {
+export interface MenuProps {
   className?:string,
   defaultIndex?:number,
   mode?:MenuMode,
@@ -47,9 +48,20 @@ const Menu:React.FC<MenuProps> = (props)=>{
     index:currentActive?? 0,
     onSelect:handleClick
   };
-  return <ul className={classes} style={style} >
+  const renderChildren = ()=>{
+    return Children.map(children,(child,index)=>{
+      const childElement = child as FunctionComponentElement<MenuItemProps>;
+      const {displayName} = childElement.type;
+      if(displayName === 'MenuItem') {
+        return cloneElement(childElement,{index})
+      }else {
+        console.warn('warning: this child not MenuItem')
+      }
+    })
+  }
+  return <ul className={classes} style={style} data-testid='test-menu'>
     <MenuContext.Provider value={transmitValue}>
-      {children}
+      {renderChildren()}
     </MenuContext.Provider>
 
   </ul>

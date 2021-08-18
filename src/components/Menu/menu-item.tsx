@@ -6,8 +6,8 @@
 import classNames from "classnames";
 import {useMenu} from './menu'
 
-interface MenuItemProps {
-  index:number,
+export interface MenuItemProps {
+  index?:number,
   className?:string,
   disabled?:boolean,
   style?:React.CSSProperties
@@ -21,7 +21,7 @@ const MenuItem:React.FC<MenuItemProps> = (props) =>{
   })
   const handleClick = ()=>{
     // 如果有onSelect函数 且 disabled为假
-    if(onSelect&& !disabled){
+    if(onSelect&& !disabled && typeof index ==='number' ){
       onSelect(index)
     }
   }
@@ -29,4 +29,5 @@ const MenuItem:React.FC<MenuItemProps> = (props) =>{
     {children}
   </li>
 }
+MenuItem.displayName = 'MenuItem'
 export default MenuItem;
